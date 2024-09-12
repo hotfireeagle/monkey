@@ -125,3 +125,45 @@ func (il *IntegerLiteral) TokenLiteral() string {
 func (il *IntegerLiteral) String() string {
 	return il.Token.Literal
 }
+
+// 前缀表达式
+type PrefixExpression struct {
+	Token    token.Token // 前缀词法单元，比如! -
+	Operator string      // 前缀词法单元的字符串字面量
+	Right    Expression
+}
+
+func (pe *PrefixExpression) expressionNode() {}
+func (pe *PrefixExpression) TokenLiteral() string {
+	return pe.Token.Literal
+}
+func (pe *PrefixExpression) String() string {
+	var out bytes.Buffer
+	out.WriteString("(")
+	out.WriteString(pe.Operator)
+	out.WriteString(pe.Right.String())
+	out.WriteString(")")
+	return out.String()
+}
+
+// 中缀表达式
+type InfixExpression struct {
+	Token    token.Token // 中缀运算符token
+	Left     Expression
+	Operator string // 中缀运算符的字符串表现形式
+	Right    Expression
+}
+
+func (ie *InfixExpression) expressionNode() {}
+func (ie *InfixExpression) TokenLiteral() string {
+	return ie.Token.Literal
+}
+func (ie *InfixExpression) String() string {
+	var out bytes.Buffer
+	out.WriteString("(")
+	out.WriteString(ie.Left.String())
+	out.WriteString(" " + ie.Operator + " ")
+	out.WriteString(ie.Right.String())
+	out.WriteString(")")
+	return out.String()
+}
